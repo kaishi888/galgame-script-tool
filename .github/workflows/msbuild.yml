@@ -46,7 +46,7 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name:galgame-script-tool
-        path:galgame-script-tool/bin/Release
+        name: fund
+        path: /bin/Release
       
       
