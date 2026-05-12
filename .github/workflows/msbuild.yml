@@ -47,6 +47,6 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: fund
-        path: build/
+        path: D:\a\galgame-script-tool
       
       
