@@ -85,13 +85,15 @@ namespace Will
                     using var reader = new BinaryReader(File.OpenRead(path));
                     var scripts = reader.ReadWillScripts();
 
-                    Directory.CreateDirectory($"{path}1");
+                    Directory.CreateDirectory($"{path}~");
 
                     foreach (var script in scripts)
                     {
                         if (!script.HasText()) continue;
                         Console.WriteLine($"Export {script.Name}");
-                        using var writer = File.CreateText($"{path}1/{script.Name}.txt");
+                        char[] invalidChars = Path.GetInvalidFileNameChars()
+                        string safename = string.Concat(script.Name.Where(ch => !invaildChars.Contains(ch)));    
+                        using var writer = File.CreateText($"{path}~/{safeName}.txt");
                         for (var i = 0; i < script.Commands.Length; i++)
                         {
                             var text = Export(script.Commands[i]);
