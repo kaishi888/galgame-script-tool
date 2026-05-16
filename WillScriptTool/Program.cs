@@ -114,10 +114,10 @@ namespace Will
                     foreach (var script in scripts)
                     {
                         if (!script.HasText()) continue;
-                        if (!File.Exists($"{path}~/{script.Name}.txt")) continue;
+                        if (!File.Exists($"{path}/{script.Name}.txt")) continue;
                         Console.WriteLine($"Import {script.Name}");
                         var translated = new string[script.Commands.Length];
-                        foreach (var line in File.ReadLines($"{path}~/{script.Name}.txt"))
+                        foreach (var line in File.ReadLines($"{path}/{script.Name}.txt"))
                         {
                             var match = Regex.Match(line, @"◆(\d+)◆(.+)$");
                             if (!match.Success) continue;
