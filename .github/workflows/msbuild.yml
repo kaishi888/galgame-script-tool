@@ -41,12 +41,12 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
-      run: msbuild ScriptTool.sln /p:Configuration=Release /p:Platform="Any CPU" /m
+      run: msbuild ScriptTool.sln /p:Configuration=Debug /p:Platform="Any CPU" /m
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: galtool
-        path: .\bin\Release\
+        path: .\bin\Debug\
       
       
