@@ -91,7 +91,7 @@ namespace Will
                     {
                         if (!script.HasText()) continue;
                         Console.WriteLine($"Export {script.Name}");
-                        char[] invalidChars = Path.GetInvalidFileNameChars()
+                        char[] invalidChars = Path.GetInvalidFileNameChars();
                         string safename = string.Concat(script.Name.Where(ch => !invalidChars.Contains(ch)));    
                         using var writer = File.CreateText($"{path}~/{safeName}.txt");
                         for (var i = 0; i < script.Commands.Length; i++)
