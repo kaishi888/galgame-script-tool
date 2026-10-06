@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -90,8 +90,9 @@ namespace Will
                     foreach (var script in scripts)
                     {
                         if (!script.HasText()) continue;
+                        var safeName = GetSafeFileName(script.Name);
                         Console.WriteLine($"Export {script.Name}");
-                        using var writer = File.CreateText($"{path}~/{script.Name}.txt");
+                        using var writer = File.CreateText($"{path}~/{safeName}.txt");
                         for (var i = 0; i < script.Commands.Length; i++)
                         {
                             var text = Export(script.Commands[i]);
@@ -114,10 +115,11 @@ namespace Will
                     foreach (var script in scripts)
                     {
                         if (!script.HasText()) continue;
-                        if (!File.Exists($"{path}~/{script.Name}.txt")) continue;
+                        var safeName = GetSafeFileName(script.Name);
+                        if (!File.Exists($"{path}~/{safeName}.txt")) continue;
                         Console.WriteLine($"Import {script.Name}");
                         var translated = new string[script.Commands.Length];
-                        foreach (var line in File.ReadLines($"{path}~/{script.Name}.txt"))
+                        foreach (var line in File.ReadLines($"{path}~/{safeName}.txt"))
                         {
                             var match = Regex.Match(line, @"◆(\d+)◆(.+)$");
                             if (!match.Success) continue;
@@ -384,6 +386,19 @@ namespace Will
             if (script.Name.EndsWith("Tbl")) return false;
             return script.Commands
                 .Any(command => command.Length > 0x02 && (command[0x01] == 0x09 || command[0x01] == 0x25));
+        }
+
+        /// <summary>
+        /// 将包含非法文件名字符的字符串替换为安全字符，避免 File.CreateText 抛出异常。
+        /// </summary>
+        private static string GetSafeFileName(string name)
+        {
+            var invalidChars = Path.GetInvalidFileNameChars();
+            foreach (var c in invalidChars)
+            {
+                name = name.Replace(c, '_');
+            }
+            return name;
         }
     }
 }
