@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -91,9 +91,7 @@ namespace Will
                     {
                         if (!script.HasText()) continue;
                         Console.WriteLine($"Export {script.Name}");
-                        char[] invalidChars = Path.GetInvalidFileNameChars();
-                        string safeName = string.Concat(script.Name.Where(ch => !invalidChars.Contains(ch)));    
-                        using var writer = File.CreateText($"{path}~/{safeName}.txt");
+                        using var writer = File.CreateText($"{path}~/{script.Name}.txt");
                         for (var i = 0; i < script.Commands.Length; i++)
                         {
                             var text = Export(script.Commands[i]);
@@ -116,10 +114,10 @@ namespace Will
                     foreach (var script in scripts)
                     {
                         if (!script.HasText()) continue;
-                        if (!File.Exists($"{path}/{script.Name}.txt")) continue;
+                        if (!File.Exists($"{path}~/{script.Name}.txt")) continue;
                         Console.WriteLine($"Import {script.Name}");
                         var translated = new string[script.Commands.Length];
-                        foreach (var line in File.ReadLines($"{path}/{script.Name}.txt"))
+                        foreach (var line in File.ReadLines($"{path}~/{script.Name}.txt"))
                         {
                             var match = Regex.Match(line, @"◆(\d+)◆(.+)$");
                             if (!match.Success) continue;
