@@ -292,20 +292,28 @@ namespace Will
 
         private static string Export(byte[] command)
         {
+            if (command.Length == 0) return null;
             if (command.Length != command[0x00]) return null;
+            if (command.Length < 2) return null;
+
             // ReSharper disable once SwitchStatementHandlesSomeKnownEnumValuesWithDefault
             switch (command[0x01])
             {
                 // Message
                 case 0x09:
                 {
-                    return _encoding.GetString(command, 0x02, command[0x00] - 0x03);
+                    var count = command[0x00] - 0x03;
+                    if (count < 0) return null;
+                    return _encoding.GetString(command, 0x02, count);
                 }
                 // Character Name
                 case 0x25:
                 {
-                    var offset = Array.IndexOf(command, 0x00, 0x02);
-                    return _encoding.GetString(command, 0x02, offset);
+                    var end = Array.IndexOf(command, (byte)0x00, 0x02);
+                    if (end < 0) end = command.Length;
+                    var count = end - 0x02;
+                    if (count < 0) return null;
+                    return _encoding.GetString(command, 0x02, count);
                 }
                 default:
                     return null;
@@ -314,7 +322,10 @@ namespace Will
 
         private static byte[] Import(byte[] command, string text)
         {
+            if (command.Length == 0) return command;
             if (command.Length != command[0x00]) return command;
+            if (command.Length < 2) return command;
+
             // ReSharper disable once SwitchStatementHandlesSomeKnownEnumValuesWithDefault
             switch (command[0x01])
             {
